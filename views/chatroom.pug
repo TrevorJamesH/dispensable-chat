@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  p Home
+  .container
+    .chatroomList
+      for room in roomList
+        button(onclick='loadRoom(\''+`${room.name}`+'\')' className='button roomName' )=room.name
+      
+      
+    .chat
+      
