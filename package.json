@@ -1,0 +1,27 @@
+{
+  "name": "dispensable-chat",
+  "version": "0.1.0",
+  "description": "Socket io chat room",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrevorJamesH/dispensable-chat.git"
+  },
+  "author": "Trevor Hewitt, Helen Yau, Serafin Wesnidge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TrevorJamesH/dispensable-chat/issues"
+  },
+  "homepage": "https://github.com/TrevorJamesH/dispensable-chat#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "knex": "^0.13.0",
+    "pug": "^2.0.0-rc.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
