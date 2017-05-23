@@ -4,7 +4,8 @@
   "description": "Socket io chat room",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "db-dev": "knex migrate:latest --knexfile ./db/knexfile.js"
   },
   "repository": {
     "type": "git",
