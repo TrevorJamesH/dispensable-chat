@@ -20,7 +20,13 @@ const postChat = (chat, user, room) => {
   .returning('*')
 }
 
+const getAllRooms = () => {
+  return knex
+  .table('chats')
+  .distinct('room')
+  .select()
+}
+
 module.exports = {
-  postChat: postChat,
-  getAllChatsByRoom: getAllChatsByRoom
+  postChat, getAllChatsByRoom, getAllRooms
 }
