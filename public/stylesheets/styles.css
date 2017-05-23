@@ -1,0 +1,75 @@
+.roomName{
+  display: flex;
+  flex-direction: row;
+  border: 1px dashed purple;
+  background-color: gold;
+  margin: 5px;
+}
+
+.chatroomList h4 {
+  color: white;
+}
+
+.chatroomList{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: #776036;
+}
+
+.chat {
+  display: flex;
+  flex-grow: 5;
+  align-items: center;
+  flex-direction: column;
+  border: 2px solid black;
+  background-color: #fffbf4;
+}
+
+.chatroom-container{
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  height: 80vh;
+}
+
+.input {
+  margin: auto auto 0 auto;
+  border: 2px solid black;
+}
+
+.inputText {
+  border: none;
+  width: 45vw;
+  height: 5vh;
+  min-height: 25px;
+  resize: none;
+  outline: none;
+}
+
+.messages {
+  width: 90%;
+  text-align: center;
+}
+
+.chat p {
+  margin: 10px auto 10px 0;
+  width: 50%;
+  border: 2px solid #f1ea9b;
+  border-radius: 50px;
+  padding: 10px;
+  background-color: #f1ea9b;
+}
+
+.chat .user {
+  margin: 0 0 0 auto;
+  width: 50%;
+  border: 2px solid #ffe6cb;
+  border-radius: 50px;
+  padding: 10px;
+  background-color: #ffe6cb;
+}
+
+chatroom-container * {
+  display: flex;
+}

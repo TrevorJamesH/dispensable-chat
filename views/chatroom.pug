@@ -2,11 +2,19 @@ extends layout
 
 block content
   p Home
-  .container
+  .chatroom-container
     .chatroomList
+      h4 Chatrooms
       for room in roomList
-        button(onclick='loadRoom(\''+`${room.name}`+'\')' className='button roomName' )=room.name
+        button(onclick='loadRoom(\''+`${room.name}`+'\')' class='button roomName' )=room.name
       
       
     .chat
-      
+      | Text
+      div.messages
+        p Oh no Im a sample chat message
+        p.user Im a message from the user themselves!
+        p Oh no Im a sample chat message
+      .input
+        textarea.inputText
+        button.submitChatButton(onclick='submitChatMessage') +
