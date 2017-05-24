@@ -12,5 +12,5 @@ block content
       | Text
       div.messages
       .input
-        textarea.inputText
+        textarea.inputText(onkeypress='checkEnter()')
         button.submitChatButton(onclick='submitChatMessage()') +

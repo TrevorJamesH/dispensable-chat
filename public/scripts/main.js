@@ -47,7 +47,21 @@ function getRooms() {
   })
 }
 
-function submitChatMessage() {
+function checkEnter(){
+  const key = window.event.keyCode
+  if(key === 13){
+    window.event.preventDefault()
+    checkNotEmpty()
+  }
+}
+
+function checkNotEmpty(){
+  if(/[^\s]/.test(document.querySelector('.inputText').value)){
+    submitChatMessage()
+  }
+}
+
+function submitChatMessage(){
   var currentRoomName = sessionStorage.getItem('currentChatRoom')
   console.log("I think the room your in is:", currentRoomName)
   let inputText = document.querySelector('.inputText').value
@@ -85,10 +99,16 @@ function getChats( room ){
       chatDom.setAttribute('class', chat.user === user ? 'user' : null )
       chatDom.innerText = chat.chat
       document.querySelector('.messages').appendChild(chatDom)
+
+      const messages = document.querySelector('.messages')
+      messages.scrollTop = messages.scrollHeight;
     })
   })
 }
 
 document.addEventListener('DOMContentLoaded', () => {
- getRooms()
+  getRooms()
+  if(sessionStorage.hasOwnProperty('currentChatRoom')){
+    getChats(sessionStorage.getItem('currentChatRoom'))
+  }
 })

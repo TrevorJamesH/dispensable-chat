@@ -66,6 +66,7 @@
 .messages {
   width: 90%;
   text-align: center;
+  overflow-x: auto;
 }
 
 .chat p {
