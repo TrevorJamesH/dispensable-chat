@@ -13,18 +13,20 @@ const index = require('./routes/index')
 app.use('/', index)
 app.use(cookieParser())
 app.use(bodyParser.json())
+app.use(require('body-parser').json())
 app.use(session( { 
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true
 }))
 
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'public/stylesheets')))
 app.use(express.static(path.join(__dirname, 'public/scripts')))
-
-// views
 
 app.listen(3000)
