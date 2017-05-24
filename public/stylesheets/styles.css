@@ -8,11 +8,11 @@
   margin: 5px;
 }
 
-.chatroomList h4 {
+.chatroomListContainer h4 {
   color: white;
 }
 
-.chatroomList{
+.chatroomListContainer, .chatroomList {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

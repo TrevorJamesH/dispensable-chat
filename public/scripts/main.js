@@ -17,10 +17,6 @@ function signup() {
   console.log('youve signed up in')
 }
 
-function loadRoom( roomName ){
-  console.log('loadRoom', roomName)
-}
-
 function getRooms() {
   fetch('/getAllRooms', {method: 'get'})
   .then(response => response.json())
@@ -29,6 +25,7 @@ function getRooms() {
       const values = response.map(rooms => {
         return Object.values(rooms)[0]
       })
+      document.querySelector('.chatroomList').innerHTML = ''
       values.forEach(value => {
         const room = document.createElement('button')
         room.setAttribute('class', 'button roomName')
@@ -37,7 +34,6 @@ function getRooms() {
 
         document.querySelector('.chatroomList').appendChild(room)
       })
-
 
       console.log(values)
     } else {
@@ -82,6 +78,62 @@ function submitChatMessage(){
     getChats( currentRoomName )
   })
   document.querySelector('.inputText').value = ''
+}
+
+function addChatRoom(){
+  if(sessionStorage.getItem('currentChatRoom') === 'New ChatRoom'){
+    return
+  }
+  sessionStorage.setItem('currentChatRoom', 'New ChatRoom')
+  const input = document.createElement('input')
+  input.class = 'roomName'
+
+  const checkValidRoomName = () => {
+    return (/[^\s]/.test(input.value))
+  }
+
+  input.onkeypress = () => {
+    const key = window.event.keyCode
+    if(key === 13){
+      if(checkValidRoomName()){
+        sessionStorage.setItem('currentChatRoom', input.value)
+        postChatRoom(input.value)
+      } else {
+        getRooms()
+      }
+      window.event.preventDefault()
+    }
+  }
+  input.blur = () => {
+    if(checkValidRoomName()){
+      sessionStorage.setItem('currentChatRoom', input.value)
+      postChatRoom(input.value)
+    } else {
+      getRooms()
+    }
+  }
+
+  document.querySelector('.chatroomList').appendChild(input)
+  input.focus()
+}
+
+function postChatRoom(chatroom){
+  fetch('/postChat', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      chat: 'Welcome',
+      room: chatroom,
+      user: 'Bill Nye'
+    })
+  })
+  .then(response => response.json())
+  .then(response => {
+    getRooms()
+    getChats( chatroom )
+  })
 }
 
 function getChats( room ){

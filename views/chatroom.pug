@@ -1,11 +1,12 @@
 extends layout
 
 block content
-  p Home
   .chatroom-container
-    .chatroomList
+    .chatroomListContainer
       h4 Chatrooms
-
+      button.addChatRoomButton(onclick="addChatRoom()") + 
+      .chatroomList
+      
       
       
     .chat
