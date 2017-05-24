@@ -13,7 +13,6 @@ function login() {
 }
 
 function signup() {
-  console.log('youve logged in')
   fetch('/signup', {method: 'get'})
   .then(response => response.json())
   .then( response => {
