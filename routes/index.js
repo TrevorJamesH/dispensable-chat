@@ -22,8 +22,9 @@ router.get('/favicon.ico', (req, res) => {
   res.sendStatus(204)
 })
 
-router.get('/postChat', (req, res) => {
-  postChat('sample', 'user', 'grumpy cat')
+router.post('/postChat', (req, res) => {
+  console.log('req.body',req.body)
+  postChat(req.body.chat, req.body.room, req.body.user)
   .then(response => {
     res.send(response)
   })
@@ -31,6 +32,13 @@ router.get('/postChat', (req, res) => {
 
 router.get('/getAllRooms', (req, res) => {
   getAllRooms()
+  .then(response => {
+    res.send(response)
+  })
+})
+
+router.get('/getAllChatsByRoom/:room', (req, res) => {
+  getAllChatsByRoom( req.params.room )
   .then(response => {
     res.send(response)
   })

@@ -9,7 +9,7 @@ const getAllChatsByRoom = (room) => {
   .returning('*')
 }
 
-const postChat = (chat, user, room) => {
+const postChat = (chat, room, user) => {
   return knex
   .table('chats')
   .insert({

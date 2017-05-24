@@ -1,3 +1,5 @@
+
+
 .roomName{
   display: flex;
   flex-direction: row;
@@ -24,6 +26,20 @@
   flex-direction: column;
   border: 2px solid black;
   background-color: #fffbf4;
+}
+
+.chat::after {
+  content: "";
+  background: url('/candyImage.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 .chatroom-container{
@@ -62,7 +78,7 @@
 }
 
 .chat .user {
-  margin: 0 0 0 auto;
+  margin: 10px 0 10px auto;
   width: 50%;
   border: 2px solid #ffe6cb;
   border-radius: 50px;
