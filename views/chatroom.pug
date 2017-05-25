@@ -1,19 +1,15 @@
 extends layout
 
 block content
-  p Home
   .chatroom-container
-    .chatroomList
+    .chatroomListContainer
       h4 Chatrooms
-
-      
+      button.addChatRoomButton(onclick="addChatRoom()") + 
+      .chatroomList
       
     .chat
       | Text
       div.messages
-        p Oh no Im a sample chat message
-        p.user Im a message from the user themselves!
-        p Oh no Im a sample chat message
       .input
-        textarea.inputText
-        button.submitChatButton(onclick='submitChatMessage') +
+        textarea.inputText(onkeypress='checkEnter()')
+        button.submitChatButton(onclick='submitChatMessage()') +
