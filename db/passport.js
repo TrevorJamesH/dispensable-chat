@@ -1,12 +1,8 @@
 const Knex = require('knex')
-const env = 'development'
 const knex = Knex(require('./knexfile.js').development)
 const userSchema = require('./modals/user')
-const passport = require('passport')
-const passportLocal = require('passport-local')
 
 const createUser = (username, password) => {
-  console.log('inside the DB route, making:', username, ', unhashed password:', password)
   return knex
   .table('users')
   .insert({
@@ -16,18 +12,18 @@ const createUser = (username, password) => {
   .returning('*')
 }
 
-const authenticatePassword = (username, password) => {
-  return knex
-  .table('users')
-  .where({
-    username: username
-  })
-  .select('*')
-  .then(result => {
-    userSchema.validPassword(password, result.password)
-    return result
-  })
-}
+// const authenticatePassword = (username, password) => {
+//   return knex
+//   .table('users')
+//   .where({
+//     username: username
+//   })
+//   .select('*')
+//   .then(result => {
+//     userSchema.validPassword(password, result.password)
+//     return result
+//   })
+// }
 
 const findById = (id, callback) => {
   return knex
@@ -56,5 +52,5 @@ const findByUsername = (username, callback) => {
 }
 
 module.exports = {
-  createUser, authenticatePassword, findById, findByUsername
+  createUser, findById, findByUsername
 }

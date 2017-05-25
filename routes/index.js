@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {postChat, getAllChatsByRoom, getAllRooms} = require('../db/db')
-const {createUser, authenticatePassword} = require('../db/passport')
+const {createUser} = require('../db/passport')
 
 function isLoggedIn(req, res, next) {
   if(req.isAuthenticated()) {
@@ -12,7 +12,12 @@ function isLoggedIn(req, res, next) {
 
 module.exports = function(app, passport) {
   router.get('/', (req, res) => {
-    res.render('landing')
+    console.log('user1:', req.user)
+    if(req.user) {
+      res.redirect('/home/redirect')
+    } else {
+      res.render('landing')
+    }
   })
 
   router.get('/login', (req, res) => {
@@ -25,7 +30,7 @@ module.exports = function(app, passport) {
 
   router.post('/login', (req, res, next) => {
     passport.authenticate('local-login', {
-      successRedirect: '/home',
+      successRedirect: '/home/redirect',
       failureRedirect: '/login/input'
     })(req, res, next)
   })
@@ -42,8 +47,18 @@ module.exports = function(app, passport) {
   router.post('/signup', (req, res) => {
     createUser(req.body.username, req.body.password)
     .then( result => {
+      req.session.user_id = result.id
+      req.session.username = req.body.username
+      req.session.password = req.body.password
+      res.cookie('user_id', result.id, { maxAge: (30*60*1000), httpOnly: false })
       res.status(200).send(result)
     })
+  })
+
+  router.get('/home/redirect', (req, res) => {
+    console.log('reqid:', req.session.user_id, 'session:', req.session)
+    res.cookie('user_id', req.session.user_id, { maxAge: (30*60*1000), httpOnly: false })
+    res.redirect('/home')
   })
 
   // router.post('/signup', (req, res, next) => {

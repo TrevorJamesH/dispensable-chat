@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+
 function getRooms() {
   fetch('/getAllRooms', {method: 'get'})
   .then(response => response.json())
@@ -18,16 +20,15 @@ function getRooms() {
 
     } else {
       console.error('Oh no, nothing came back')
-      // Display error
     }
   })
 }
 
-function sendButtonClicked(){
+function sendButtonClicked() { // eslint-disable-line
   checkNotEmpty(document.querySelector('.inputText').value)
 }
 
-function checkEnter(){
+function checkEnter() { // eslint-disable-line
   const key = window.event.keyCode
   if(key === 13){
     window.event.preventDefault()
@@ -35,15 +36,15 @@ function checkEnter(){
   }
 }
 
-function checkNotEmpty(text){
+function checkNotEmpty(text) {
   if(/[^\s]/.test(text)){
     submitChatMessage()
   }
 }
 
-const socket = io()
+const socket = io() // eslint-disable-line
 
-function submitChatMessage(){
+function submitChatMessage() {
   var currentRoomName = sessionStorage.getItem('currentChatRoom')
   let inputText = document.querySelector('.inputText').value
 
@@ -58,15 +59,14 @@ function submitChatMessage(){
       user: 'user2'
     }),
   })
-  .then(response => response.json())
-  .then(response => {
+  .then( () => {
     getChats( currentRoomName )
     socket.emit('chat message', inputText)
   })
   document.querySelector('.inputText').value = ''
 }
 
-function addChatRoom(){
+function addChatRoom(){ // eslint-disable-line
   const input = document.createElement('input')
   input.setAttribute('class','roomName')
 
@@ -107,8 +107,7 @@ function postChatRoom(chatroom){
       user: 'Bill Nye'
     })
   })
-  .then(response => response.json())
-  .then(response => {
+  .then( () => {
     socket.emit('new room', chatroom)
     getRooms()
     getChats( chatroom )
@@ -124,14 +123,14 @@ function getChats( room ){
   fetch('/getAllChatsByRoom/'+room, {method: 'get'})
   .then(response => response.json())
   .then( response => {
-    const values = response.forEach(chat => {
+    response.forEach(chat => {
       const chatDom = document.createElement('p')
       chatDom.setAttribute('class', chat.user === user ? 'user' : null )
       chatDom.innerText = chat.chat
       document.querySelector('.messages').appendChild(chatDom)
 
       const messages = document.querySelector('.messages')
-      messages.scrollTop = messages.scrollHeight;
+      messages.scrollTop = messages.scrollHeight
     })
   })
 }
@@ -142,11 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
     getChats(sessionStorage.getItem('currentChatRoom'))
   }
 
-  socket.on('get messages', function(data){
+  socket.on('get messages', () => {
     getChats( sessionStorage.getItem('currentChatRoom' ))
   })
 
-  socket.on('get rooms', function(data){
+  socket.on('get rooms', () => {
     getRooms()
   })
 })
