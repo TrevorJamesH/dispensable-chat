@@ -20,12 +20,15 @@ function getRooms() {
 
     } else {
       console.error('Oh no, nothing came back')
-      // Display error
     }
   })
 }
 
-function checkEnter(){ // eslint-disable-line
+function sendButtonClicked() { // eslint-disable-line
+  checkNotEmpty(document.querySelector('.inputText').value)
+}
+
+function checkEnter() { // eslint-disable-line
   const key = window.event.keyCode
   if(key === 13){
     window.event.preventDefault()
@@ -33,7 +36,7 @@ function checkEnter(){ // eslint-disable-line
   }
 }
 
-function checkNotEmpty(text){
+function checkNotEmpty(text) {
   if(/[^\s]/.test(text)){
     submitChatMessage()
   }
@@ -41,7 +44,7 @@ function checkNotEmpty(text){
 
 const socket = io() // eslint-disable-line
 
-function submitChatMessage(){
+function submitChatMessage() {
   var currentRoomName = sessionStorage.getItem('currentChatRoom')
   let inputText = document.querySelector('.inputText').value
 
@@ -105,6 +108,7 @@ function postChatRoom(chatroom){
     })
   })
   .then( () => {
+    socket.emit('new room', chatroom)
     getRooms()
     getChats( chatroom )
   })
@@ -139,5 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('get messages', () => {
     getChats( sessionStorage.getItem('currentChatRoom' ))
+  })
+
+  socket.on('get rooms', () => {
+    getRooms()
   })
 })

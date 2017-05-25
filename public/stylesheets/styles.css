@@ -1,4 +1,7 @@
-
+.cancelButton {
+  display: flex;
+  margin: -22px 0 0 300px;
+}
 
 .roomName{
   display: flex;
