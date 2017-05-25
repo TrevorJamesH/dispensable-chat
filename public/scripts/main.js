@@ -1,5 +1,4 @@
 function login() {
-  console.log('youve logged in')
   fetch('/login', {method: 'get'})
   .then(response => response.json())
   .then( response => {
@@ -46,8 +45,6 @@ function getRooms() {
         document.querySelector('.chatroomList').appendChild(room)
       })
 
-
-      console.log(values)
     } else {
       console.error('Oh no, nothing came back')
       // Display error

@@ -23,7 +23,7 @@ const authenticatePassword = (username, password) => {
   })
   .select('*')
   .then(result => {
-    console.log(userSchema.validPassword(password, result.password))
+    userSchema.validPassword(password, result.password)
     return result
   })
 }
@@ -36,8 +36,8 @@ const findById = (id, callback) => {
   })
   .select()
   .then(result => {
-    console.log('I\'ve gotten here 2')
-    return callback(null, result)
+    callback(null, result)
+    return result
   })
 }
 
@@ -49,8 +49,8 @@ const findByUsername = (username, callback) => {
   })
   .first()
   .then(row => {
-    console.log('I\'ve gotten here 3')
     callback(null, row)
+    return row
   })
 }
 

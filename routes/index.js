@@ -23,10 +23,12 @@ module.exports = function(app, passport) {
     res.render('login')
   })
 
-  router.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/home', // redirect to the secure profile section
-    failureRedirect : '/login/input', // redirect back to the signup page if there is an error
-  }))
+  router.post('/login', (req, res, next) => {
+    passport.authenticate('local-login', {
+      successRedirect: '/home',
+      failureRedirect: '/login/input'
+    })(req, res, next)
+  })
 
   router.post('/logout', (req, res) => {
     res.logout()
@@ -44,12 +46,19 @@ module.exports = function(app, passport) {
     })
   })
 
+  app.post('/signup', (req, res, next) => {
+    passport.authenticate('local-login', {
+      successRedirect : '/home',
+      failureRedirect : '/signup/input'
+    })(req, res, next)
+  })
+
   router.get('/signup/input', (req, res) => {
     res.render('signup')
   })
 
-  router.get('/home', isLoggedIn, (req, res) => {
-    isLoggedIn(req, res)
+  router.get('/home', isLoggedIn, (req, res, next) => {
+    isLoggedIn(req, res, next)
     res.render('chatroom')
   })
 
