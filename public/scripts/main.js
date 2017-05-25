@@ -23,6 +23,10 @@ function getRooms() {
   })
 }
 
+function sendButtonClicked(){
+  checkNotEmpty(document.querySelector('.inputText').value)
+}
+
 function checkEnter(){
   const key = window.event.keyCode
   if(key === 13){
@@ -105,6 +109,7 @@ function postChatRoom(chatroom){
   })
   .then(response => response.json())
   .then(response => {
+    socket.emit('new room', chatroom)
     getRooms()
     getChats( chatroom )
   })
@@ -137,8 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
     getChats(sessionStorage.getItem('currentChatRoom'))
   }
 
-  socket.on('get messages', function(data) {
+  socket.on('get messages', function(data){
     getChats( sessionStorage.getItem('currentChatRoom' ))
-    console.log('recieving new chats')
+  })
+
+  socket.on('get rooms', function(data){
+    getRooms()
   })
 })

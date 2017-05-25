@@ -19,8 +19,10 @@ io.on('connection', function(socket) {
     console.log('user disconnect')
   })
   socket.on('chat message', function(msg) {
-    console.log('server recieved message')
     socket.broadcast.emit('get messages',  msg)
+  })
+  socket.on('new room', function(msg) {
+    socket.broadcast.emit('get rooms',  msg)
   })
 })
 
