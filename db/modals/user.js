@@ -10,7 +10,8 @@ userSchema.generateHash = function(password) {
 
 // checking if password is valid
 userSchema.validPassword = function(password, comparePw) {
-  return bcrypt.compareSync(password, comparePw);
+  console.log('in validate:', password, ', ', comparePw)
+  return bcrypt.compareSync(comparePw, password);
 };
 
 // create the model for users and expose it to our app

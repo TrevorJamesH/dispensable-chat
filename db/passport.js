@@ -34,8 +34,11 @@ const findById = (id, callback) => {
   .where({
     id: id
   })
-  .select('*')
-  .then(result => callback(null, result))
+  .select()
+  .then(result => {
+    console.log('I\'ve gotten here 2')
+    return callback(null, result)
+  })
 }
 
 const findByUsername = (username, callback) => {
@@ -44,8 +47,11 @@ const findByUsername = (username, callback) => {
   .where({
     username: username
   })
-  .select('*')
-  .then(result => callback(null, result))
+  .first()
+  .then(row => {
+    console.log('I\'ve gotten here 3')
+    callback(null, row)
+  })
 }
 
 module.exports = {

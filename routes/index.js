@@ -26,7 +26,6 @@ module.exports = function(app, passport) {
   router.post('/login', passport.authenticate('local-login', {
     successRedirect : '/home', // redirect to the secure profile section
     failureRedirect : '/login/input', // redirect back to the signup page if there is an error
-    failureFlash : false // allow flash messages
   }))
 
   router.post('/logout', (req, res) => {
