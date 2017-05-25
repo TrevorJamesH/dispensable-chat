@@ -22,7 +22,8 @@
     "eslint": "^3.19.0",
     "express": "^4.15.3",
     "knex": "^0.13.0",
-    "pug": "^2.0.0-rc.1"
+    "pug": "^2.0.0-rc.1",
+    "socket.io": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^3.19.0",

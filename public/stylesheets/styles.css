@@ -6,17 +6,26 @@
   border: 1px dashed purple;
   background-color: gold;
   margin: 5px;
+  outline: none;
 }
 
 .chatroomListContainer h4 {
   color: white;
 }
 
-.chatroomListContainer, .chatroomList {
+.chatroomListContainer{
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   background-color: #776036;
+}
+
+.chatroomList{
+  overflow: auto;
+}
+
+.chatroomList *{
+  width: 90%;
 }
 
 .chat {

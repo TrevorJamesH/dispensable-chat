@@ -1,5 +1,4 @@
 function login() {
-  console.log('youve logged in')
   fetch('/login', {method: 'post', redirect: 'follow'})
   .then(response => response.json())
   .then( response => {
@@ -35,7 +34,6 @@ function getRooms() {
         document.querySelector('.chatroomList').appendChild(room)
       })
 
-      console.log(values)
     } else {
       console.error('Oh no, nothing came back')
       // Display error
@@ -47,21 +45,29 @@ function checkEnter(){
   const key = window.event.keyCode
   if(key === 13){
     window.event.preventDefault()
-    checkNotEmpty()
+    checkNotEmpty(document.querySelector('.inputText').value)
   }
 }
 
-function checkNotEmpty(){
-  if(/[^\s]/.test(document.querySelector('.inputText').value)){
+function checkNotEmpty(text){
+  if(/[^\s]/.test(text)){
     submitChatMessage()
   }
 }
 
+const socket = io()
+
 function submitChatMessage(){
   var currentRoomName = sessionStorage.getItem('currentChatRoom')
-  console.log("I think the room your in is:", currentRoomName)
   let inputText = document.querySelector('.inputText').value
-  console.log('inputText',inputText)
+  socket.emit('chat message', inputText)
+  socket.on('chat message', function(msg) {
+    const p = document.createElement('p')
+    p.setAttribute('class', chat.user === user ? 'user' : null )
+    p.innerText = chat.chat
+    document.querySelector('.messages').appendChild(p)
+  })
+
   fetch('/postChat', {
     method: 'post',
     headers: {
@@ -81,12 +87,8 @@ function submitChatMessage(){
 }
 
 function addChatRoom(){
-  if(sessionStorage.getItem('currentChatRoom') === 'New ChatRoom'){
-    return
-  }
-  sessionStorage.setItem('currentChatRoom', 'New ChatRoom')
   const input = document.createElement('input')
-  input.class = 'roomName'
+  input.setAttribute('class','roomName')
 
   const checkValidRoomName = () => {
     return (/[^\s]/.test(input.value))
@@ -95,16 +97,12 @@ function addChatRoom(){
   input.onkeypress = () => {
     const key = window.event.keyCode
     if(key === 13){
-      if(checkValidRoomName()){
-        sessionStorage.setItem('currentChatRoom', input.value)
-        postChatRoom(input.value)
-      } else {
-        getRooms()
-      }
+      input.blur()
       window.event.preventDefault()
     }
   }
-  input.blur = () => {
+
+  input.onblur = () => {
     if(checkValidRoomName()){
       sessionStorage.setItem('currentChatRoom', input.value)
       postChatRoom(input.value)
@@ -137,7 +135,6 @@ function postChatRoom(chatroom){
 }
 
 function getChats( room ){
-  console.log("Im the current room", room)
   //temp dummy data
   const user = 'user3'
   sessionStorage.setItem('currentChatRoom', room)

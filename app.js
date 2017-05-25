@@ -2,7 +2,23 @@ const express = require('express')
 const path = require('path')
 const db = require('./db/db')
 const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
 const bodyParser = require('body-parser')
+
+io.on('connection', function(socket) {
+  console.log('helloooo is this working??')
+  socket.on('disconnect', function() {
+    console.log('user disconnect')
+  })
+  socket.on('chat message', function(msg) {
+    io.emit('message',  msg)
+  })
+})
+
+// http.listen(3001, function() {
+//   console.log('testinggggg')
+// })
 
 app.use(bodyParser.json())
 
@@ -16,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public/stylesheets')))
 app.use(express.static(path.join(__dirname, 'public/scripts')))
 app.use(express.static(path.join(__dirname, 'public/images')))
 
+
 // views
 
-app.listen(3000)
+server.listen(3000)

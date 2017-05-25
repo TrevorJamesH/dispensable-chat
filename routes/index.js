@@ -3,7 +3,7 @@ const router = express.Router()
 const {postChat, getAllChatsByRoom, getAllRooms} = require('../db/db')
 
 router.get('/', (req, res) => {
-  res.render('landing')
+  res.sendFile(__dirname + 'landing')
 })
 
 router.post('/login', (req, res) => {
@@ -23,7 +23,6 @@ router.get('/favicon.ico', (req, res) => {
 })
 
 router.post('/postChat', (req, res) => {
-  console.log('req.body',req.body)
   postChat(req.body.chat, req.body.room, req.body.user)
   .then(response => {
     res.send(response)

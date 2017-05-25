@@ -6,6 +6,7 @@ const getAllChatsByRoom = (room) => {
   return knex
   .table('chats')
   .where('room', room)
+  .orderBy('id', 'asc')
   .returning('*')
 }
 
