@@ -1,5 +1,4 @@
 const Knex = require('knex')
-const env = 'development'
 const knex = Knex(require('./knexfile.js').development)
 
 const getAllChatsByRoom = (room) => {

@@ -1,6 +1,8 @@
+/*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+
+
 const express = require('express')
 const path = require('path')
-const db = require('./db/db')
 const app = express()
 const passport = require('passport')
 const cookieParser = require('cookie-parser')
@@ -68,6 +70,11 @@ passport.use('local-login', new LocalStrategy({
       return done(null, false, 'Oops! Wrong password.')
     }
 
+    req.session.user_id = user.id
+    req.session.username = username
+    req.session.password = password
+    console.log('session:', req.session)
+
     return done(null, user)
   })
 }))
@@ -85,7 +92,6 @@ passport.use('local-signup', new LocalStrategy({
       if (user) {
         return done(null, false, 'That email is already taken.')
       }
-      console.log('Im about to create user')
       var returnValue = createUser(username, password)
       return done(null, returnValue)
     })

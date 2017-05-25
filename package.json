@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "db-dev": "knex migrate:latest --knexfile ./db/knexfile.js"
+    "db-dev": "knex migrate:latest --knexfile ./db/knexfile.js",
+    "lint": "./node_modules/.bin/eslint ./; exit 0"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,6 @@
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
     "body-parser": "^1.17.2",
-    "eslint": "^3.19.0",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "knex": "^0.13.0",

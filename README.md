@@ -5,6 +5,9 @@ http://jsdev.learnersguild.org/goals/378-Socket-Party_Chat.html
 
 ## Specifications
 
+Our own added spec. (Gives us credit/points for it? I heard it's a guild wide spec now)
+- [X] No linting errors. You can run eslint with `npm run lint`.
+
 ### General Specs
 
 - [X] App has a **landing page** (on route `/`) where a user can either **log in** of **sign up**.
@@ -25,9 +28,9 @@ http://jsdev.learnersguild.org/goals/378-Socket-Party_Chat.html
 - [X] View has a `sign-up` button.
 - [X] When `log-in` button is clicked, both `log-in` and `sign-up` button are hidden and a `log-in form` takes their place on the screen.
 - [X] Same as above for `sign` up, but instead of a `log-in form` we see a `sign-up form`.
-- [ ] On **either form** clicking a `cancel` button removes the form from view, and we again get a view with the two buttons.
-- [ ] On `log-in form`, clicking submit will check to see if the user exists and authenticate the entered password with the user's stored password.
-- [ ] On `sign-up form`, clicking submit adds them to the database and logs them in.
+- [X] On **either form** clicking a `cancel` button removes the form from view, and we again get a view with the two buttons.
+- [X] On `log-in form`, clicking submit will check to see if the user exists and authenticate the entered password with the user's stored password.
+- [X] On `sign-up form`, clicking submit adds them to the database and logs them in.
 - [X] On log-in, after the user is authenticated, a session is set.
 - [ ] Closing the page and reopening it will redirect user to `/home`
 - [ ] Session persists until `logout` or after 30 minutes pass.

@@ -1,4 +1,6 @@
-function login() {
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+
+function login() { // eslint-disable-line
   fetch('/login', {method: 'get'})
   .then(response => response.json())
   .then( response => {
@@ -11,7 +13,7 @@ function login() {
   })
 }
 
-function signup() {
+function signup() { // eslint-disable-line
   fetch('/signup', {method: 'get'})
   .then(response => response.json())
   .then( response => {
@@ -19,7 +21,6 @@ function signup() {
       window.location = response.redirectUrl
     } else {
       console.error('Oh no, error')
-      // Display error
     }
   })
 }
