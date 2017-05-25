@@ -1,21 +1,3 @@
-function login() {
-  fetch('/login', {method: 'post', redirect: 'follow'})
-  .then(response => response.json())
-  .then( response => {
-    if (response.redirectUrl) {
-      window.location = response.redirectUrl
-    } else {
-      console.error('Oh no, error')
-      // Display error
-    }
-  })
-
-}
-
-function signup() {
-  console.log('youve signed up in')
-}
-
 function getRooms() {
   fetch('/getAllRooms', {method: 'get'})
   .then(response => response.json())
