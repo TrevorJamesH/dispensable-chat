@@ -60,13 +60,6 @@ const socket = io()
 function submitChatMessage(){
   var currentRoomName = sessionStorage.getItem('currentChatRoom')
   let inputText = document.querySelector('.inputText').value
-  socket.emit('chat message', inputText)
-  socket.on('chat message', function(msg) {
-    const p = document.createElement('p')
-    p.setAttribute('class', chat.user === user ? 'user' : null )
-    p.innerText = chat.chat
-    document.querySelector('.messages').appendChild(p)
-  })
 
   fetch('/postChat', {
     method: 'post',
@@ -82,6 +75,7 @@ function submitChatMessage(){
   .then(response => response.json())
   .then(response => {
     getChats( currentRoomName )
+    socket.emit('chat message', inputText)
   })
   document.querySelector('.inputText').value = ''
 }
@@ -160,4 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if(sessionStorage.hasOwnProperty('currentChatRoom')){
     getChats(sessionStorage.getItem('currentChatRoom'))
   }
+
+  socket.on('get messages', function(data) {
+    getChats( sessionStorage.getItem('currentChatRoom' ))
+    console.log('recieving new chats')
+  })
 })

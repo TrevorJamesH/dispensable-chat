@@ -7,12 +7,13 @@ const io = require('socket.io')(server)
 const bodyParser = require('body-parser')
 
 io.on('connection', function(socket) {
-  console.log('helloooo is this working??')
+  console.log('server connected')
   socket.on('disconnect', function() {
     console.log('user disconnect')
   })
   socket.on('chat message', function(msg) {
-    io.emit('message',  msg)
+    console.log('server recieved message')
+    socket.broadcast.emit('get messages',  msg)
   })
 })
 
