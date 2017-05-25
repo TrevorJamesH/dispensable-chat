@@ -6,10 +6,11 @@ const getAllChatsByRoom = (room) => {
   return knex
   .table('chats')
   .where('room', room)
+  .orderBy('id', 'asc')
   .returning('*')
 }
 
-const postChat = (chat, user, room) => {
+const postChat = (chat, room, user) => {
   return knex
   .table('chats')
   .insert({

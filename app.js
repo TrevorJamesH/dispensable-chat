@@ -7,18 +7,30 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const LocalStrategy = require('passport-local').Strategy
-const {findById, findByUsername} = require('./db/passport')
+const {findById, findByUsername, createUser} = require('./db/passport')
 const userSchema = require('./db/modals/user')
 require('dotenv').config()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
 
+io.on('connection', function(socket) {
+  console.log('server connected')
+  socket.on('disconnect', function() {
+    console.log('user disconnect')
+  })
+  socket.on('chat message', function(msg) {
+    console.log('server recieved message')
+    socket.broadcast.emit('get messages',  msg)
+  })
+})
 
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.text())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
 
-app.use(session( { 
+
+app.use(session( {
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true
@@ -40,9 +52,9 @@ passport.deserializeUser(function(id, done) {
 passport.use('local-login', new LocalStrategy({
   usernameField : 'username',
   passwordField : 'password',
-  passReqToCallback : true, 
+  passReqToCallback : true,
   session: true
-}, (req, username, password, done) => { 
+}, (req, username, password, done) => {
   findByUsername(username, function(err, user) {
     if (err){
       return done(err)
@@ -73,6 +85,9 @@ passport.use('local-signup', new LocalStrategy({
       if (user) {
         return done(null, false, 'That email is already taken.')
       }
+      console.log('Im about to create user')
+      var returnValue = createUser(username, password)
+      return done(null, returnValue)
     })
   })
 }))
@@ -82,6 +97,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'public/stylesheets')))
 app.use(express.static(path.join(__dirname, 'public/scripts')))
+app.use(express.static(path.join(__dirname, 'public/images')))
+
 
 app.use('/', require('./routes/index')(app, passport))
-app.listen(3000)
+server.listen(3000)

@@ -46,12 +46,13 @@ module.exports = function(app, passport) {
     })
   })
 
-  app.post('/signup', (req, res, next) => {
-    passport.authenticate('local-login', {
-      successRedirect : '/home',
-      failureRedirect : '/signup/input'
-    })(req, res, next)
-  })
+  // router.post('/signup', (req, res, next) => {
+  //   console.log('Ive been posted')
+  //   passport.authenticate('local-signup', {
+  //     successRedirect : '/home',
+  //     failureRedirect : '/signup/input'
+  //   })(req, res, next)
+  // })
 
   router.get('/signup/input', (req, res) => {
     res.render('signup')
@@ -66,8 +67,8 @@ module.exports = function(app, passport) {
     res.sendStatus(204)
   })
 
-  router.get('/postChat', (req, res) => {
-    postChat('sample', 'user', 'grumpy cat')
+  router.post('/postChat', (req, res) => {
+    postChat(req.body.chat, req.body.room, req.body.user)
     .then(response => {
       res.send(response)
     })
@@ -75,6 +76,13 @@ module.exports = function(app, passport) {
 
   router.get('/getAllRooms', (req, res) => {
     getAllRooms()
+    .then(response => {
+      res.send(response)
+    })
+  })
+
+  router.get('/getAllChatsByRoom/:room', (req, res) => {
+    getAllChatsByRoom( req.params.room )
     .then(response => {
       res.send(response)
     })

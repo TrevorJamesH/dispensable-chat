@@ -6,6 +6,7 @@ const passport = require('passport')
 const passportLocal = require('passport-local')
 
 const createUser = (username, password) => {
+  console.log('inside the DB route, making:', username, ', unhashed password:', password)
   return knex
   .table('users')
   .insert({
