@@ -3,7 +3,8 @@ extends layout
 block content
   p Login
   form(action='/login' method='post')
-    
     input(type='text' name='username')
     input(type='password' name='password')
     input(type='submit')
+  form(action='/', method='get')
+    button.cancelButton cancel
