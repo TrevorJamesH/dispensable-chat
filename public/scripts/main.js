@@ -220,6 +220,7 @@ function getChats(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  sessionStorage.setItem('currentChatRoom', null)
   populateRoomDom()
   if(sessionStorage.hasOwnProperty('currentChatRoom')){
     getChats()
