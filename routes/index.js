@@ -50,7 +50,7 @@ module.exports = function(app, passport) {
       req.session.username = req.body.username
       req.session.password = req.body.password
       res.cookie('user_id', result.id, { maxAge: (30*60*1000), httpOnly: false })
-      res.status(200).send(result)
+      res.redirect('/login/input')
     })
   })
 
