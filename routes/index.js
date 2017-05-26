@@ -83,7 +83,6 @@ module.exports = function(app, passport) {
   router.post('/postRoom', (req, res) => {
     postRoom(req.body.roomName)
     .then(response => {
-      console.log('Response from posting room', response)
       res.send(response)
     })
   })
@@ -111,7 +110,7 @@ module.exports = function(app, passport) {
 
   router.post('/unsubscribe', (req, res) => {
     return unsubscribe(req.body.userId, req.body.roomId)
-    .then( response => {
+    .then( () => {
       res.sendStatus(204)
     })
   })
@@ -124,7 +123,6 @@ module.exports = function(app, passport) {
   })
 
   router.post('/getAllChatsByRoom', (req, res) => {
-    console.log('getAllChats req body',req.body)
     getAllChatsByRoom( req.body.roomId )
     .then(response => {
       res.send(response)

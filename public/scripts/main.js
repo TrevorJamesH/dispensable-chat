@@ -1,4 +1,5 @@
 /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
+const socket = io() // eslint-disable-line
 
 function fetchRooms() {
   return fetch('/getRoomsByUserId', {
@@ -26,7 +27,6 @@ function getRoom(){
 function populateRoomDom() {
   fetchRooms()
   .then( response => {
-    console.log('populateRoomDom response',response)
     if (response) {
       document.querySelector('.chatroomList').innerHTML = ''
       response.forEach( chatRoom => {
@@ -90,7 +90,6 @@ function checkNotEmpty(text) {
   }
 }
 
-const socket = io() // eslint-disable-line
 
 function submitChatMessage() {
   var currentRoomID = getRoom()
@@ -183,7 +182,6 @@ function subscribeUser(roomId){
 function getChats(){
   const room = getRoom()
   document.querySelector('.messages').innerHTML = ''
-  console.log('roomid====>', room)
   fetch('/getAllChatsByRoom', {
     method: 'post',
     headers: {
@@ -218,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(response => response.json())
     .then( rooms => {
       const input = event.target
-      autoComplt.enable(input, {
+      autoComplt.enable(input, { // eslint-disable-line
         hintsFetcher: (v, openList) => {
           const hints = []
           for (let i = 0; i < rooms.length; i++) {
@@ -245,5 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('get rooms', () => {
     populateRoomDom()
+  })
+
+  socket.on('disconnect', () => {
+    socket.disconnect()
   })
 })

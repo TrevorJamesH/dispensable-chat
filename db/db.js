@@ -28,13 +28,6 @@ const postRoom = (roomName) => {
   .returning('*')
 }
 
-const getRoomIdByName = (roomName) => {
-  return knex
-  .first('id')
-  .from('chatRooms')
-  .where('name', roomName)
-}
-
 const getAllRooms = () => {
   return knex
   .table('chatRooms')
