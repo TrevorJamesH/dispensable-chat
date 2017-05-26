@@ -129,5 +129,22 @@ module.exports = function(app, passport) {
     })
   })
 
+  router.get('/logout/redirect', (req, res) => {
+    res.json({url:'/logout'})
+  })
+
+  router.get('/logout', (req,res) => {
+    req.logout()
+    req.session = null
+    let cookie = req.cookies
+    for (var prop in cookie) {
+      if (!cookie.hasOwnProperty(prop)) {
+        continue
+      }
+      res.cookie(prop, '', {expires: new Date(0)})
+    }
+    res.redirect('/')
+  })
+
   return router
 }

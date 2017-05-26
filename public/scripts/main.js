@@ -20,6 +20,19 @@ function changeRoom( roomId ) {
   populateRoomDom()
 }
 
+function logout() { // eslint-disable-line
+  fetch('/logout/redirect', {method: 'get'})
+  .then( response => response.json())
+  .then( response => {
+    if(response.url) {
+      window.location = response.url
+    }
+    else {
+      console.error('No response') // eslint-disable-line
+    }
+  })
+}
+
 function getRoom(){
   return Number(sessionStorage.getItem('currentChatRoom'))
 }
