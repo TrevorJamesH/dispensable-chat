@@ -4,8 +4,9 @@
   "description": "Socket io chat room",
   "main": "app.js",
   "scripts": {
+    "init-db": "createdb despensable-chat-dev && npm run migrate:latest",
+    "migrate:latest": "knex migrate:latest --knexfile ./db/knexfile.js",
     "start": "nodemon app.js",
-    "db-dev": "knex migrate:latest --knexfile ./db/knexfile.js",
     "lint": "./node_modules/.bin/eslint ./; exit 0"
   },
   "repository": {

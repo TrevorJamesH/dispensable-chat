@@ -1,7 +1,22 @@
 # dispensable-chat
 Socket.io party chat
+Team name: `dispensable-flicker`
 
 http://jsdev.learnersguild.org/goals/378-Socket-Party_Chat.html
+
+## Instructions
+
+Type the following in your terminal
+1. `git clone https://github.com/TrevorJamesH/dispensable-chat.git trevorSocket`
+2. `cd trevorSocket`
+3. `npm run init-db`
+4. Get the Secret code from our team via Slack
+5. `echo "The secret code you got from us" > .env`
+6. `npm start`
+8. Open Google chrome to `localhost:3000`
+9. Say "WOW this is amazing!"
+10. Give us 100% on the project in slack by typing `/review #dispensable-flicker 100`
+11. Give us high-gives too.
 
 ## Specifications
 

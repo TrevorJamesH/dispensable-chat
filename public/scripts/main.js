@@ -20,11 +20,11 @@ function changeRoom( roomId ) {
   populateRoomDom()
 }
 
-function logout() {
+function logout() { // eslint-disable-line
   fetch('/logout/redirect', {method: 'get'})
   .then( response => response.json())
   .then( response => {
-    console.log('response', response.url)
+
     if(response.url) {
       window.location = response.url
     }

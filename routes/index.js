@@ -50,7 +50,7 @@ module.exports = function(app, passport) {
       req.session.username = req.body.username
       req.session.password = req.body.password
       res.cookie('user_id', result.id, { maxAge: (30*60*1000), httpOnly: false })
-      res.status(200).send(result)
+      res.redirect('/login/input')
     })
   })
 
@@ -136,12 +136,12 @@ module.exports = function(app, passport) {
   router.get('/logout', (req,res) => {
     req.logout()
     req.session = null
-    cookie = req.cookies
+    let cookie = req.cookies
     for (var prop in cookie) {
-        if (!cookie.hasOwnProperty(prop)) {
-            continue
-        }
-        res.cookie(prop, '', {expires: new Date(0)})
+      if (!cookie.hasOwnProperty(prop)) {
+        continue
+      }
+      res.cookie(prop, '', {expires: new Date(0)})
     }
     res.redirect('/')
   })
