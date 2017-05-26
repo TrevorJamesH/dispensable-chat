@@ -1,11 +1,15 @@
 extends layout
 
 block content
+  script(src='/scripts/autoCompleteIt.js')
   script(src='/socket.io/socket.io.js')
   script(src='/scripts/main.js')
   .chatroom-container
     .chatroomListContainer
       h4 Chatrooms
+      .searchBarContainer
+        p Search
+        input.searchBar(type='input')
       button.addChatRoomButton(onclick="addChatRoom()") + 
       .chatroomList
       

@@ -99,6 +99,18 @@
   background-color: #ffe6cb;
 }
 
-chatroom-container * {
+.searchBarContainer {
   display: flex;
+  margin: 10px;
+}
+
+.searchBarContainer * {
+  margin: 0;
+  height: 15px;
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.searchBarContainer p {
+  color: white;
 }
