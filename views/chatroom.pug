@@ -6,7 +6,9 @@ block content
   script(src='/scripts/main.js')
   .chatroom-container
     .chatroomListContainer
-      h4 Chatrooms
+      .titleLogout
+        h4 Chatrooms
+        button(onclick='logout()') Logout
       .searchBarContainer
         p Search
         input.searchBar(type='input')
