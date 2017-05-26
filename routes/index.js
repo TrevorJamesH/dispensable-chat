@@ -83,7 +83,7 @@ module.exports = function(app, passport) {
   })
 
   router.post('/postChat', (req, res) => {
-    postChat(req.body.chat, req.body.room, req.body.user)
+    postChat(req.body.chat, req.body.room, req.body.user_id)
     .then(response => {
       res.send(response)
     })

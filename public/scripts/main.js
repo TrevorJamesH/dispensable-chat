@@ -56,7 +56,7 @@ function submitChatMessage() {
     body: JSON.stringify({
       chat: inputText,
       room: currentRoomName,
-      user: 'user2'
+      user_id: getUserID()
     }),
   })
   .then( () => {
@@ -68,7 +68,7 @@ function submitChatMessage() {
 
 function addChatRoom(){ // eslint-disable-line
   const input = document.createElement('input')
-  input.setAttribute('class','roomName')
+  input.setAttribute('class','roomName inputChat')
 
   const checkValidRoomName = () => {
     return (/[^\s]/.test(input.value))
@@ -104,7 +104,7 @@ function postChatRoom(chatroom){
     body: JSON.stringify({
       chat: 'Welcome',
       room: chatroom,
-      user: 'Bill Nye'
+      user_id: getUserID()
     })
   })
   .then( () => {
@@ -114,9 +114,11 @@ function postChatRoom(chatroom){
   })
 }
 
+function getUserID(){
+  return Number(document.cookie.split('=')[1])
+}
+
 function getChats( room ){
-  //temp dummy data
-  const user = 'user3'
   sessionStorage.setItem('currentChatRoom', room)
 
   document.querySelector('.messages').innerHTML = ''
@@ -125,7 +127,9 @@ function getChats( room ){
   .then( response => {
     response.forEach(chat => {
       const chatDom = document.createElement('p')
-      chatDom.setAttribute('class', chat.user === user ? 'user' : null )
+      console.log(getUserID())
+      console.log(chat.user_id)
+      chatDom.setAttribute('class', chat.user_id === getUserID() ? 'user' : null )
       chatDom.innerText = chat.chat
       document.querySelector('.messages').appendChild(chatDom)
 
