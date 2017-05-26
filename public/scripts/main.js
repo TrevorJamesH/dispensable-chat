@@ -1,8 +1,12 @@
 /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
+function listRooms() {
+  return fetch('/getAllRooms', {method: 'get'})
+    .then(response => response.json())
+}
+
 function getRooms() {
-  fetch('/getAllRooms', {method: 'get'})
-  .then(response => response.json())
+  listRooms()
   .then( response => {
     if (response) {
       const values = response.map(rooms => {
@@ -140,6 +144,27 @@ document.addEventListener('DOMContentLoaded', () => {
   if(sessionStorage.hasOwnProperty('currentChatRoom')){
     getChats(sessionStorage.getItem('currentChatRoom'))
   }
+
+  document.querySelector('.searchBar').addEventListener('input', (event) => {
+    listRooms()
+    .then( roomInputs => {
+      const rooms = roomInputs.map( roomContainer => {
+        return roomContainer.room
+      })
+      const input = event.target
+      autoComplt.enable(input, {
+        hintsFetcher: (v, openList) => {
+          const hints = []
+          for (let i = 0; i < rooms.length; i++) {
+            if (rooms[i].indexOf(v) >= 0) {
+              hints.push(rooms[i])
+            }
+          }
+          openList(hints)
+        }
+      })
+    })
+  })
 
   socket.on('get messages', () => {
     getChats( sessionStorage.getItem('currentChatRoom' ))
