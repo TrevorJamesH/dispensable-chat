@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {postChat, getAllChatsByRoom, getAllRooms, postRoom, getRoomsByUserId, addUserToRoom} = require('../db/db')
+const {postChat, unsubscribe, getAllChatsByRoom, getAllRooms, postRoom, getRoomsByUserId, addUserToRoom} = require('../db/db')
 const {createUser} = require('../db/passport')
 
 function isLoggedIn(req, res, next) {
@@ -83,7 +83,6 @@ module.exports = function(app, passport) {
   router.post('/postRoom', (req, res) => {
     postRoom(req.body.roomName)
     .then(response => {
-      console.log('Response from posting room', response)
       res.send(response)
     })
   })
@@ -96,7 +95,7 @@ module.exports = function(app, passport) {
   })
 
   router.post('/subscribeUser', (req, res) => {
-    addUserToRoom(req.body.user_id, req.body.roomName)
+    addUserToRoom(req.body.userId, req.body.roomId)
     .then(response => {
       res.send(response)
     })
@@ -109,6 +108,13 @@ module.exports = function(app, passport) {
     })
   })
 
+  router.post('/unsubscribe', (req, res) => {
+    return unsubscribe(req.body.userId, req.body.roomId)
+    .then( () => {
+      res.sendStatus(204)
+    })
+  })
+
   router.get('/getAllRooms', (req, res) => {
     getAllRooms()
     .then(response => {
@@ -117,11 +123,27 @@ module.exports = function(app, passport) {
   })
 
   router.post('/getAllChatsByRoom', (req, res) => {
-    console.log('getAllChats req body',req.body)
     getAllChatsByRoom( req.body.roomId )
     .then(response => {
       res.send(response)
     })
+  })
+
+  router.get('/logout/redirect', (req, res) => {
+    res.json({url:'/logout'})
+  })
+
+  router.get('/logout', (req,res) => {
+    req.logout()
+    req.session = null
+    cookie = req.cookies
+    for (var prop in cookie) {
+        if (!cookie.hasOwnProperty(prop)) {
+            continue
+        }
+        res.cookie(prop, '', {expires: new Date(0)})
+    }
+    res.redirect('/')
   })
 
   return router

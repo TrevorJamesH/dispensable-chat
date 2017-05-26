@@ -19,6 +19,7 @@ io.on('connection', function(socket) {
   console.log('server connected')
   socket.on('disconnect', function() {
     console.log('user disconnect')
+    socket.disconnect()
   })
   socket.on('chat message', function(msg) {
     socket.broadcast.emit('get messages',  msg)

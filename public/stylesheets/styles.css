@@ -3,6 +3,16 @@
   margin: -22px 0 0 300px;
 }
 
+.titleLogout {
+  display: flex;
+  flex-direction: row;
+}
+
+.titleLogout * {
+  display: flex;
+  flex-grow: 1;
+}
+
 .roomName{
   display: flex;
   flex-direction: row;
