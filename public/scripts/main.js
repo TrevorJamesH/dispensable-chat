@@ -1,23 +1,39 @@
 /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
-function listRooms() {
-  return fetch('/getAllRooms', {method: 'get'})
-    .then(response => response.json())
+function fetchRooms() {
+  return fetch('/getRoomsByUserId', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_id: getUserID()
+    })
+  })
+  .then(response => response.json())
 }
 
-function getRooms() {
-  listRooms()
+function changeRoom( roomId ) {
+  sessionStorage.setItem('currentChatRoom', roomId )
+  getChats()
+  populateRoomDom()
+}
+
+function getRoom(){
+  return Number(sessionStorage.getItem('currentChatRoom'))
+}
+
+function populateRoomDom() {
+  fetchRooms()
   .then( response => {
+    console.log('populateRoomDom response',response)
     if (response) {
-      const values = response.map(rooms => {
-        return Object.values(rooms)[0]
-      })
       document.querySelector('.chatroomList').innerHTML = ''
-      values.forEach(value => {
+      response.forEach( chatRoom => {
         const room = document.createElement('button')
         room.setAttribute('class', 'button roomName')
-        room.onclick = () => getChats( value )
-        room.innerText = value
+        room.onclick = () => changeRoom(chatRoom.id)
+        room.innerText = chatRoom.name
 
         document.querySelector('.chatroomList').appendChild(room)
       })
@@ -49,7 +65,7 @@ function checkNotEmpty(text) {
 const socket = io() // eslint-disable-line
 
 function submitChatMessage() {
-  var currentRoomName = sessionStorage.getItem('currentChatRoom')
+  var currentRoomID = getRoom()
   let inputText = document.querySelector('.inputText').value
 
   fetch('/postChat', {
@@ -59,12 +75,12 @@ function submitChatMessage() {
     },
     body: JSON.stringify({
       chat: inputText,
-      room: currentRoomName,
+      room: currentRoomID,
       user_id: getUserID()
     }),
   })
   .then( () => {
-    getChats( currentRoomName )
+    getChats()
     socket.emit('chat message', inputText)
   })
   document.querySelector('.inputText').value = ''
@@ -88,10 +104,9 @@ function addChatRoom(){ // eslint-disable-line
 
   input.onblur = () => {
     if(checkValidRoomName()){
-      sessionStorage.setItem('currentChatRoom', input.value)
-      postChatRoom(input.value)
+      postRoom(input.value)
     } else {
-      getRooms()
+      populateRoomDom()
     }
   }
 
@@ -99,22 +114,21 @@ function addChatRoom(){ // eslint-disable-line
   input.focus()
 }
 
-function postChatRoom(chatroom){
-  fetch('/postChat', {
+function postRoom(roomName){
+  fetch('/postRoom', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      chat: 'Welcome',
-      room: chatroom,
-      user_id: getUserID()
+      roomName: roomName
     })
   })
-  .then( () => {
-    socket.emit('new room', chatroom)
-    getRooms()
-    getChats( chatroom )
+  .then( response => response.json() )
+  .then( (response) => {
+    socket.emit('new room', roomName)
+    changeRoom(response[0].id)
+    subscribeUser( response[0].id )
   })
 }
 
@@ -122,17 +136,41 @@ function getUserID(){
   return Number(document.cookie.split('=')[1])
 }
 
-function getChats( room ){
-  sessionStorage.setItem('currentChatRoom', room)
+function subscribeUser(roomName){
+  const user_id = getUserID()
 
+  fetch('/subscribeUser', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user_id: user_id,
+      roomName: roomName
+    })
+  })
+  .then(() => {
+    populateRoomDom()
+  })
+}
+
+function getChats(){
+  const room = getRoom()
   document.querySelector('.messages').innerHTML = ''
-  fetch('/getAllChatsByRoom/'+room, {method: 'get'})
+  console.log('roomid====>', room)
+  fetch('/getAllChatsByRoom', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      roomId: room
+    })
+  })
   .then(response => response.json())
   .then( response => {
     response.forEach(chat => {
       const chatDom = document.createElement('p')
-      console.log(getUserID())
-      console.log(chat.user_id)
       chatDom.setAttribute('class', chat.user_id === getUserID() ? 'user' : null )
       chatDom.innerText = chat.chat
       document.querySelector('.messages').appendChild(chatDom)
@@ -144,13 +182,13 @@ function getChats( room ){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  getRooms()
+  populateRoomDom()
   if(sessionStorage.hasOwnProperty('currentChatRoom')){
-    getChats(sessionStorage.getItem('currentChatRoom'))
+    getChats()
   }
 
   document.querySelector('.searchBar').addEventListener('input', (event) => {
-    listRooms()
+    fetchRooms()
     .then( roomInputs => {
       const rooms = roomInputs.map( roomContainer => {
         return roomContainer.room
@@ -171,10 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   socket.on('get messages', () => {
-    getChats( sessionStorage.getItem('currentChatRoom' ))
+    getChats()
   })
 
   socket.on('get rooms', () => {
-    getRooms()
+    populateRoomDom()
   })
 })

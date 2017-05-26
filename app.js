@@ -75,7 +75,6 @@ passport.use('local-login', new LocalStrategy({
     req.session.user_id = user.id
     req.session.username = username
     req.session.password = password
-    console.log('session:', req.session)
 
     return done(null, user)
   })

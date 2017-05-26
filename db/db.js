@@ -1,32 +1,64 @@
 const Knex = require('knex')
 const knex = Knex(require('./knexfile.js').development)
 
-const getAllChatsByRoom = (room) => {
+const getAllChatsByRoom = (roomId) => {
   return knex
   .table('chats')
-  .where('room', room)
+  .where('room_id', roomId)
   .orderBy('id', 'asc')
   .returning('*')
 }
 
-const postChat = (chat, room, user_id) => {
+const postChat = (chat, roomId, userId) => {
   return knex
   .table('chats')
   .insert({
     chat: chat,
-    user_id: user_id,
-    room: room
+    user_id: userId,
+    room_id: roomId
+  })
+}
+
+const postRoom = (roomName) => {
+  return knex
+  .table('chatRooms')
+  .insert({
+    name: roomName
   })
   .returning('*')
 }
 
+const getRoomIdByName = (roomName) => {
+  return knex
+  .first('id')
+  .from('chatRooms')
+  .where('name', roomName)
+}
+
 const getAllRooms = () => {
   return knex
-  .table('chats')
-  .distinct('room')
-  .select()
+  .table('chatRooms')
+  .select('*')
+}
+
+const getRoomsByUserId = ( user_id ) => {
+  return knex
+  .select('chatRooms.name', 'chatRooms.id')
+  .from('userRooms')
+  .where('user_id', user_id)
+  .innerJoin('chatRooms', 'chatRooms.id', 'userRooms.room_id')
+}
+
+const addUserToRoom = (userId, roomId) => {
+  return knex
+  .table('userRooms')
+  .insert({
+    room_id: roomId,
+    user_id: userId
+  })
+  .returning('*')
 }
 
 module.exports = {
-  postChat, getAllChatsByRoom, getAllRooms
+  postChat, getAllChatsByRoom, getAllRooms, postRoom, addUserToRoom, getRoomsByUserId
 }

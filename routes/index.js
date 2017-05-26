@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {postChat, getAllChatsByRoom, getAllRooms} = require('../db/db')
+const {postChat, getAllChatsByRoom, getAllRooms, postRoom, getRoomsByUserId, addUserToRoom} = require('../db/db')
 const {createUser} = require('../db/passport')
 
 function isLoggedIn(req, res, next) {
@@ -12,7 +12,6 @@ function isLoggedIn(req, res, next) {
 
 module.exports = function(app, passport) {
   router.get('/', (req, res) => {
-    console.log('user1:', req.user)
     if(req.user) {
       res.redirect('/home/redirect')
     } else {
@@ -56,7 +55,6 @@ module.exports = function(app, passport) {
   })
 
   router.get('/home/redirect', (req, res) => {
-    console.log('reqid:', req.session.user_id, 'session:', req.session)
     res.cookie('user_id', req.session.user_id, { maxAge: (30*60*1000), httpOnly: false })
     res.redirect('/home')
   })
@@ -82,10 +80,32 @@ module.exports = function(app, passport) {
     res.sendStatus(204)
   })
 
+  router.post('/postRoom', (req, res) => {
+    postRoom(req.body.roomName)
+    .then(response => {
+      console.log('Response from posting room', response)
+      res.send(response)
+    })
+  })
+
   router.post('/postChat', (req, res) => {
     postChat(req.body.chat, req.body.room, req.body.user_id)
     .then(response => {
       res.send(response)
+    })
+  })
+
+  router.post('/subscribeUser', (req, res) => {
+    addUserToRoom(req.body.user_id, req.body.roomName)
+    .then(response => {
+      res.send(response)
+    })
+  })
+
+  router.post('/getRoomsByUserId', (req, res) => {
+    getRoomsByUserId(req.body.user_id)
+    .then(response => {
+      res.send( response )
     })
   })
 
@@ -96,8 +116,9 @@ module.exports = function(app, passport) {
     })
   })
 
-  router.get('/getAllChatsByRoom/:room', (req, res) => {
-    getAllChatsByRoom( req.params.room )
+  router.post('/getAllChatsByRoom', (req, res) => {
+    console.log('getAllChats req body',req.body)
+    getAllChatsByRoom( req.body.roomId )
     .then(response => {
       res.send(response)
     })
