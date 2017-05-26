@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {postChat, getAllChatsByRoom, getAllRooms, postRoom, getRoomsByUserId, addUserToRoom} = require('../db/db')
+const {postChat, unsubscribe, getAllChatsByRoom, getAllRooms, postRoom, getRoomsByUserId, addUserToRoom} = require('../db/db')
 const {createUser} = require('../db/passport')
 
 function isLoggedIn(req, res, next) {
@@ -96,7 +96,7 @@ module.exports = function(app, passport) {
   })
 
   router.post('/subscribeUser', (req, res) => {
-    addUserToRoom(req.body.user_id, req.body.roomName)
+    addUserToRoom(req.body.userId, req.body.roomId)
     .then(response => {
       res.send(response)
     })
@@ -106,6 +106,13 @@ module.exports = function(app, passport) {
     getRoomsByUserId(req.body.user_id)
     .then(response => {
       res.send( response )
+    })
+  })
+
+  router.post('/unsubscribe', (req, res) => {
+    return unsubscribe(req.body.userId, req.body.roomId)
+    .then( response => {
+      res.sendStatus(204)
     })
   })
 

@@ -41,6 +41,12 @@ const getAllRooms = () => {
   .select('*')
 }
 
+const unsubscribe = (userId, roomId) => {
+  return knex('userRooms')
+  .where({'room_id': roomId, 'user_id': userId})
+  .del()
+}
+
 const getRoomsByUserId = ( user_id ) => {
   return knex
   .select('chatRooms.name', 'chatRooms.id')
@@ -60,5 +66,5 @@ const addUserToRoom = (userId, roomId) => {
 }
 
 module.exports = {
-  postChat, getAllChatsByRoom, getAllRooms, postRoom, addUserToRoom, getRoomsByUserId
+  postChat, unsubscribe, getAllChatsByRoom, getAllRooms, postRoom, addUserToRoom, getRoomsByUserId
 }

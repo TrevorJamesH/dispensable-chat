@@ -35,12 +35,40 @@ function populateRoomDom() {
         room.onclick = () => changeRoom(chatRoom.id)
         room.innerText = chatRoom.name
 
-        document.querySelector('.chatroomList').appendChild(room)
+        const unsubscribeButton = document.createElement('button')
+        unsubscribeButton.setAttribute('class', 'button unsubscribe')
+        unsubscribeButton.onclick = () => unsubscribe( chatRoom.id )
+        unsubscribeButton.style.flexGrow = '1'
+        unsubscribeButton.innerText = 'X'
+        room.style.flexGrow = '7'
+
+        const roomAndButton = document.createElement('div')
+        roomAndButton.style.display = 'flex'
+        roomAndButton.appendChild(room)
+        roomAndButton.appendChild(unsubscribeButton)
+
+        document.querySelector('.chatroomList').appendChild(roomAndButton)
       })
 
     } else {
       console.error('Oh no, nothing came back')
     }
+  })
+}
+
+function unsubscribe( roomId ) {
+  return fetch('/unsubscribe', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      roomId: roomId,
+      userId: getUserID()
+    })
+  })
+  .then( () => {
+    populateRoomDom()
   })
 }
 
@@ -136,17 +164,15 @@ function getUserID(){
   return Number(document.cookie.split('=')[1])
 }
 
-function subscribeUser(roomName){
-  const user_id = getUserID()
-
+function subscribeUser(roomId){
   fetch('/subscribeUser', {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user_id: user_id,
-      roomName: roomName
+      userId: getUserID(),
+      roomId: roomId
     })
   })
   .then(() => {
@@ -186,26 +212,31 @@ document.addEventListener('DOMContentLoaded', () => {
   if(sessionStorage.hasOwnProperty('currentChatRoom')){
     getChats()
   }
-
-  document.querySelector('.searchBar').addEventListener('input', (event) => {
-    fetchRooms()
-    .then( roomInputs => {
-      const rooms = roomInputs.map( roomContainer => {
-        return roomContainer.room
-      })
+  const searchBar = document.querySelector('.searchBar')
+  searchBar.addEventListener('input', (event) => {
+    fetch('/getAllRooms', {method: 'get'})
+    .then(response => response.json())
+    .then( rooms => {
       const input = event.target
       autoComplt.enable(input, {
         hintsFetcher: (v, openList) => {
           const hints = []
           for (let i = 0; i < rooms.length; i++) {
-            if (rooms[i].indexOf(v) >= 0) {
-              hints.push(rooms[i])
+            if (rooms[i].name.indexOf(v) >= 0) {
+              hints.push(rooms[i].name+' : '+rooms[i].id)
             }
           }
           openList(hints)
         }
       })
     })
+  })
+
+  searchBar.addEventListener('keypress', (event) => {
+    const key = event.keyCode
+    if(key === 13){
+      subscribeUser(searchBar.value.split(' : ')[1])
+    }
   })
 
   socket.on('get messages', () => {
