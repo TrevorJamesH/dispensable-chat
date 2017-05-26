@@ -6,33 +6,22 @@ const getAllChatsByRoom = (roomName) => {
   .then( roomId => {
     return knex
     .table('chats')
-    .where('room', room)
+    .where('room_id', roomId)
     .orderBy('id', 'asc')
     .returning('*')
   })
 }
 
 const postChat = (chat, roomName, user_id) => {
-  return knex.transaction( (trx) => {
-    getRoomIdByName(roomName)
-    .then( roomId => {
-      return knex('userRooms')
-      .transacting(trx)
-      .insert({
-        room_id: roomId,
-        user_id: user_id
-      })
+  return getRoomIdByName(roomName)
+  .then( roomId => {
+    return knex
+    .table('chats')
+    .insert({
+      chat: chat,
+      user_id: user_id,
+      room_id: roomId
     })
-    .then(() => {
-      knex('chats')
-      .transacting(trx)
-      .insert({
-        chat: chat,
-        user_id: user_id
-      })
-    })
-    .then(trx.commit)
-    .catch(trx.rollback)
   })
 }
 
@@ -48,16 +37,28 @@ const postRoom = (roomName) => {
 const getRoomIdByName = (roomName) => {
   return knex
   .table('chatRooms')
-  .where('room', roomName)
+  .where('name', roomName)
   .select()
   .returning('id')
 }
 
 const getAllRooms = () => {
   return knex
-  .table('chats')
-  .distinct('room')
+  .table('chatRooms')
+  .distinct('name')
   .select()
+}
+
+const addUserToRoom = (user_id, roomName) => {
+  getRoomIdByName(roomName)
+  .then( roomId => {
+    return knex
+    .table('userRooms')
+    .insert({
+      room_id: roomId,
+      user_id: user_id
+    })
+  })
 }
 
 module.exports = {

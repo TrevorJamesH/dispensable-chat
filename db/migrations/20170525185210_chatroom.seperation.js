@@ -11,6 +11,7 @@ exports.up = function(knex) {
     }),
     knex.schema.table('chats', function(table) {
       table.dropColumn('room')
+      table.integer('room_id')
     })
   ])
 }
@@ -20,6 +21,7 @@ exports.down = function(knex) {
     knex.schema.dropTable('chatRooms'),
     knex.schema.dropTable('userRooms'),
     knex.schema.table('chats', function(table) {
+      table.dropColumn('room_id')
       table.string('room')
     })
   ])
