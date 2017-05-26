@@ -24,11 +24,23 @@
 }
 
 .chatroomList{
-  overflow: auto;
+  overflow-x: auto;
 }
 
 .chatroomList *{
   width: 90%;
+}
+
+.addChatRoomButton{
+  border: none;
+  color: black;
+  background-color: gold;
+  width: 90%;
+  margin: 5px;
+}
+
+.inputChat {
+  margin: 2px;
 }
 
 .chat {
@@ -58,15 +70,19 @@
   display: flex;
   flex-direction: row;
   align-content: space-between;
-  height: 80vh;
+  height: 90vh;
 }
 
 .input {
+  display: flex;
+  flex-direction: row;
   margin: auto auto 0 auto;
   border: 2px solid black;
 }
 
 .inputText {
+  display: flex;
+  flex-direction: row;
   border: none;
   width: 45vw;
   height: 5vh;
@@ -79,6 +95,7 @@
   width: 90%;
   text-align: center;
   overflow-x: auto;
+  overflow-y: none;
 }
 
 .chat p {
@@ -89,6 +106,15 @@
   padding: 10px;
   background-color: #f1ea9b;
 }
+
+.submitChatButton{
+  border: none;
+  color: black;
+  background-color: gold;
+  flex-grow: 1;
+}
+
+
 
 .chat .user {
   margin: 10px 0 10px auto;
