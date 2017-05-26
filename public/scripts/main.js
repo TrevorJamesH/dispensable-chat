@@ -24,6 +24,7 @@ function logout() { // eslint-disable-line
   fetch('/logout/redirect', {method: 'get'})
   .then( response => response.json())
   .then( response => {
+
     if(response.url) {
       window.location = response.url
     }
