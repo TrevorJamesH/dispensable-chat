@@ -131,8 +131,6 @@ function getChats( room ){
   .then( response => {
     response.forEach(chat => {
       const chatDom = document.createElement('p')
-      console.log(getUserID())
-      console.log(chat.user_id)
       chatDom.setAttribute('class', chat.user_id === getUserID() ? 'user' : null )
       chatDom.innerText = chat.chat
       document.querySelector('.messages').appendChild(chatDom)

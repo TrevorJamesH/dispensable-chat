@@ -2,8 +2,11 @@ const Knex = require('knex')
 const knex = Knex(require('./knexfile.js').development)
 
 const getAllChatsByRoom = (roomName) => {
+  console.log('roomname:', roomName)
   return getRoomIdByName(roomName)
-  .then( roomId => {
+  .then( roomIdObject => {
+    const roomId = roomIdObject.id
+    console.log('id of room:', roomId)
     return knex
     .table('chats')
     .where('room_id', roomId)
@@ -14,7 +17,8 @@ const getAllChatsByRoom = (roomName) => {
 
 const postChat = (chat, roomName, user_id) => {
   return getRoomIdByName(roomName)
-  .then( roomId => {
+  .then( roomIdObject => {
+    const roomId = roomIdObject.id
     return knex
     .table('chats')
     .insert({
@@ -36,10 +40,9 @@ const postRoom = (roomName) => {
 
 const getRoomIdByName = (roomName) => {
   return knex
-  .table('chatRooms')
+  .first('id')
+  .from('chatRooms')
   .where('name', roomName)
-  .select()
-  .returning('id')
 }
 
 const getAllRooms = () => {
@@ -51,7 +54,8 @@ const getAllRooms = () => {
 
 const addUserToRoom = (user_id, roomName) => {
   getRoomIdByName(roomName)
-  .then( roomId => {
+  .then( roomIdObject => { 
+    const roomId = roomIdObject.id
     return knex
     .table('userRooms')
     .insert({

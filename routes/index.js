@@ -12,7 +12,6 @@ function isLoggedIn(req, res, next) {
 
 module.exports = function(app, passport) {
   router.get('/', (req, res) => {
-    console.log('user1:', req.user)
     if(req.user) {
       res.redirect('/home/redirect')
     } else {
@@ -56,7 +55,6 @@ module.exports = function(app, passport) {
   })
 
   router.get('/home/redirect', (req, res) => {
-    console.log('reqid:', req.session.user_id, 'session:', req.session)
     res.cookie('user_id', req.session.user_id, { maxAge: (30*60*1000), httpOnly: false })
     res.redirect('/home')
   })
